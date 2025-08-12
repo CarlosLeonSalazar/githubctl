@@ -27,7 +27,7 @@ class OutputOption(str, Enum):
 # Crear un comando de repo_app con alias "list"
 @repo_app.command(name="list", help="list user repository")
 def list_repos(user : Annotated [str, typer.Option(..., '--user', "-u", help="github user name")],
-               output : Annotated [OutputOption, typer.Option('--output', '-o', help='output format: json, csv, table')] = "json"):
+               output : Annotated [OutputOption, typer.Option('--output', '-o', help='output format: json, csv, table')] = OutputOption.json):
     
     # Llamada a función para obtener todos los repositrorios
     # repo = get_all_user_repositories(username=user)
