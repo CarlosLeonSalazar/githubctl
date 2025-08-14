@@ -1,10 +1,14 @@
 import os
 from enum import Enum
+
 import typer
 from typing_extensions import Annotated
 from dotenv import load_dotenv
 from rich import print
-from github import get_all_user_repositories
+
+from .github import get_all_user_repositories
+from .utils import print_beauty
+from .options import OutputOption
 
 if os.path.isfile(".env"):
     load_dotenv()
@@ -18,11 +22,6 @@ repo_app = typer.Typer()
 # Añadir la instancia repo_app a app como "repo"
 app.add_typer(repo_app, name="repo")
 
-class OutputOption(str, Enum):
-    json = "json"
-    csv = "csv"
-    table = "table"
-
 
 # Crear un comando de repo_app con alias "list"
 @repo_app.command(name="list", help="list user repository")
@@ -30,9 +29,9 @@ def list_repos(user : Annotated [str, typer.Option(..., '--user', "-u", help="gi
                output : Annotated [OutputOption, typer.Option('--output', '-o', help='output format: json, csv, table')] = OutputOption.json):
     
     # Llamada a función para obtener todos los repositrorios
-    # repo = get_all_user_repositories(username=user)
-    # print(repo)
-    print(output)
+    repo = get_all_user_repositories(username=user)
+    
+    print_beauty(list_of_dict=repo, output=output)
 
 
 if __name__=="__main__":
